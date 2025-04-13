@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Desafio dos Sistemas</title>
+  <style>
+    /* Estilos gerais */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #FDBF5E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Estilos das páginas */
+    .page {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    h1 {
+      margin-top: 10px;
+      color: white;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: white;
+      font-size: 1rem;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* Estilos da Página 1 - Seleção */
+    .selected-box {
+      margin-top: 15px;
+      padding: 12px;
+      width: 90%;
+      max-width: 550px;
+      min-height: 70px;
+      border-radius: 12px;
+      background-color: #FFE9BD;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      border: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .selected-card {
+      background-color: #FDBF5E;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 4px rgba(0,0,0,0.2);
+      max-width: 220px;
+      word-wrap: break-word;
+      font-size: 0.9rem;
+    }
+
+    .selected-system {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .selected-brace {
+      font-size: 2.5rem;
+      line-height: 1.2;
+      color: #6B4000;
+      align-self: flex-start;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .selected-system-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .selected-system-line {
+      text-align: left;
+      margin: 2px 0;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      line-height: 1.4;
+      font-family: 'Courier New', monospace;
+    }
+
+    .board {
+      background-color: white;
+      padding: 15px;
+      border-radius: 25px;
+      display: grid;
+      grid-template-columns: repeat(4, 160px);
+      grid-gap: 15px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: #FDBF5E;
+      border-radius: 15px;
+      height: 120px;
+      width: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-weight: bold;
+      text-align: center;
+      padding: 12px;
+      transition: all 0.3s;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card.selected {
+      border: 2px dashed #3D70FF;
+      background-color: #FFD37C;
+    }
+
+    .card.correct {
+      border: 2px solid #4CAF50;
+      background-color: #E8F5E9;
+      cursor: default;
+    }
+
+    .card.incorrect {
+      border: 2px solid #FF3B3B;
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .progress-box {
+      background-color: #FFE9BD;
+      border-radius: 15px;
+      padding: 15px;
+      width: 80%;
+      max-width: 450px;
+      text-align: center;
+      font-size: 1rem;
+      color: #6B4000;
+      margin-bottom: 20px;
+    }
+
+    /* Estilos dos botões */
+    .btn {
+      background-color: #3D70FF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #2A5BCC;
+    }
+
+    .btn:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+
+    .btn-clear {
+      background-color: #FF9800;
+    }
+
+    .btn-clear:hover {
+      background-color: #F57C00;
+    }
+
+    .btn-success {
+      background-color: #4CAF50;
+    }
+
+    .btn-success:hover {
+      background-color: #3d8b40;
+    }
+
+    .buttons-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-clear {
+  background-color: #FF9800;
+  color: white;
+}
+
+.btn-clear:hover {
+  background-color: #F57C00;
+}
+
+    /* Estilos dos sistemas */
+    .system-display {
+      display: flex;
+      margin: 15px 0;
+      justify-content: center;
+    }
+
+    .system-brace {
+      font-size: 3rem;
+      line-height: 1;
+      margin-right: 8px;
+      color: #6B4000;
+      align-self: center;
+    }
+
+    .system-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .system-line {
+      text-align: left;
+      margin: 2px 0;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      line-height: 1.4;
+      font-family: 'Courier New', monospace;
+    }
+
+    .problem-text {
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      line-height: 1.3;
+      font-size: 0.9rem;
+    }
+
+    /* Estilos da Página 2 - Resolução */
+    .problem-box {
+      background-color: #FFE9BD;
+      border-radius: 15px;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .method-selector {
+      margin: 20px 0;
+    }
+
+    .number-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 15px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    .number-card {
+      background-color: white;
+      border-radius: 10px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .number-card:hover {
+      transform: scale(1.05);
+    }
+
+    .number-card.selected {
+      border: 2px dashed #3D70FF;
+      background-color: #E1F5FE;
+    }
+
+    .feedback-box {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    .correct-feedback {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+      border: 2px solid #4CAF50;
+    }
+
+    .incorrect-feedback {
+      background-color: #FFEBEE;
+      color: #C62828;
+      border: 2px solid #EF5350;
+    }
+
+    /* Estilos da Página 3 - Solução */
+    .solution-container {
+      background-color: #FFE9BD;
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 700px;
+      margin: 20px 0;
+    }
+
+    .problem-display {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px dashed #6B4000;
+    }
+
+    .step {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .step-title {
+      font-weight: bold;
+      color: #3D70FF;
+      margin-bottom: 10px;
+    }
+
+    .math-expression {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      margin: 5px 0;
+      padding: 5px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+
+    .method-used {
+      font-weight: bold;
+      color: #6B4000;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Página 1 - Seleção de Sistema -->
+  <div id="page1" class="page active">
+    <h1>DESAFIO DOS SISTEMAS</h1>
+    <div class="subtitle">Combine cada problema com seu sistema correspondente</div>
+
+    <div id="selectedBox" class="selected-box">
+      <!-- Cartas selecionadas aparecem aqui -->
+    </div>
+
+    <div class="buttons-container">
+      <button id="validateBtn" class="btn" disabled>Enviar</button>
+      <button id="clearBtn" class="btn btn-clear">Limpar</button>
+    </div>
+
+    <div class="board" id="cardBoard">
+      <!-- As cartas serão inseridas aqui pelo JavaScript -->
+    </div>
+
+    <div class="progress-box">
+      <strong>Progresso</strong><br>
+      Combinações corretas: <span id="matchCount">0</span><br>
+      Sistemas resolvidos corretamente: <span id="solveCount">0</span>
+    </div>
+  </div>
+
+  <!-- Página 2 - Resolução do Sistema -->
+  <div id="page2" class="page">
+    <h1>RESOLVA O SISTEMA</h1>
+
+    <div class="problem-box">
+      <div id="problemText"></div>
+      <div class="system-display">
+        <div class="system-brace">{</div>
+        <div id="systemContent" class="system-content"></div>
+      </div>
+
+
+      <div class="number-cards" id="numberCards">
+        <!-- Cartas com números serão inseridas aqui -->
+      </div>
+
+      <div class="buttons-container">
+        <button id="submitBtn" class="btn" disabled>Enviar Resposta</button>
+        <button id="clearNumbersBtn" class="btn btn-clear">Limpar</button>
+      </div>
+
+      <div id="feedbackBox" class="feedback-box" style="display: none;">
+<div class="method-selector" style="margin-top: 15px;">
+    <p><strong>Escolha o método para ver a solução:</strong></p>
+    <div style="display: flex; gap: 15px; justify-content: center;">
+      <label>
+        <input type="radio" name="method" value="substituicao" checked> 
+        Substituição
+      </label>
+      <label>
+        <input type="radio" name="method" value="adicao"> 
+        Adição
+      </label>
+    </div>
+  </div>
+</div>
+
+      <div class="buttons-container">
+        <button id="solutionBtn" class="btn btn-success" style="display: none;">Ver Solução</button>
+        <button id="backBtn" class="btn btn-clear" style="display: none;">Voltar ao Início</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Página 3 - Solução do Sistema -->
+  <div id="page3" class="page">
+    <h1>SOLUÇÃO PASSO A PASSO</h1>
+
+    <div class="solution-container">
+      <div class="problem-display">
+        <div id="solutionProblemText"></div>
+        <div class="system-display">
+          <div class="system-brace">{</div>
+          <div id="solutionSystemContent" class="system-content"></div>
+        </div>
+        <div id="methodUsed" class="method-used"></div>
+      </div>
+
+      <div id="solutionSteps">
+    // VOU ESCREVER AQUI
+      </div>
+
+      <div class="buttons-container">
+        <button id="backToSolutionBtn" class="btn btn-clear">Voltar para a página anterior</button>
+        <button id="homeBtn" class="btn btn-clear">Voltar ao Início</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Estado global do jogo
+    const gameState = {
+      currentPage: 'page1',
+      selectedSystem: {
+        problem: null,
+        system: null,
+        systemId: null
+      },
+      progress: {
+        matches: 0,
+        solves: 0
+      },
+      selectedCards: [],
+      selectedNumbers: [],
+      matchedPairs: [] // Armazena os pares já acertados
+    };
+
+let metodoSelecionado = 'substituicao'; // Valor padrão
+
+// Adicione este event listener para atualizar a seleção
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('input[name="method"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      metodoSelecionado = e.target.value;
+    });
+  });
+});
+
+    // Elementos da Página 1
+    const page1 = document.getElementById('page1');
+    const selectedBox = document.getElementById('selectedBox');
+    const validateBtn = document.getElementById('validateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const matchCountSpan = document.getElementById('matchCount');
+    const solveCountSpan = document.getElementById('solveCount');
+    const cardBoard = document.getElementById('cardBoard');
+
+    // Elementos da Página 2
+    const page2 = document.getElementById('page2');
+    const problemText = document.getElementById('problemText');
+    const systemContent = document.getElementById('systemContent');
+    const numberCards = document.getElementById('numberCards');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearNumbersBtn = document.getElementById('clearNumbersBtn');
+    const solutionBtn = document.getElementById('solutionBtn');
+    const backBtn = document.getElementById('backBtn');
+    const feedbackBox = document.getElementById('feedbackBox');
+
+    // Elementos da Página 3
+    const page3 = document.getElementById('page3');
+    const solutionProblemText = document.getElementById('solutionProblemText');
+    const solutionSystemContent = document.getElementById('solutionSystemContent');
+    const solutionSteps = document.getElementById('solutionSteps');
+    const homeBtn = document.getElementById('homeBtn');
+    const methodUsed = document.getElementById('methodUsed');
+
+    // Conteúdo das cartas
+    const cardContents = [
+      // Problemas
+      { type: 'enunciado', id: '1', content: '<div class="problem-text">A soma de dois números é 4 e a diferença é 2</div>' },
+      { type: 'enunciado', id: '2', content: '<div class="problem-text">O perímetro de um retângulo é 30 cm e a diferença entre o comprimento e a largura é 5 cm</div>' },
+      { type: 'enunciado', id: '3', content: '<div class="problem-text">O dobro de um número mais o triplo de outro é 6 e a diferença entre eles é 1</div>' },
+      { type: 'enunciado', id: '4', content: '<div class="problem-text">Um número é 3 unidades maior que outro e a soma dos dois é 15</div>' },
+      { type: 'enunciado', id: '5', content: '<div class="problem-text">Um número mais o dobro de outro é 5, e o triplo do primeiro menos o segundo é 4</div>' },
+      { type: 'enunciado', id: '6', content: '<div class="problem-text">A idade de João é o dobro da idade de Maria, e a soma das idades é 48</div>' },
+      
+      // Sistemas
+{ type: 'sistema', id: '1', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">x + y = 4</div>
+        <div class="system-line">x - y = 2</div>
+      </div>
+    </div>
+  `},
+  { type: 'sistema', id: '2', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">2x + 2y = 30</div>
+        <div class="system-line">x - y = 5</div>
+      </div>
+    </div>
+  `},
+  { type: 'sistema', id: '3', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">2x + 3y = 6</div>
+        <div class="system-line">x - y = 1</div>
+      </div>
+    </div>
+  `},
+  { type: 'sistema', id: '4', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">x = y + 3</div>
+        <div class="system-line">x + y = 15</div>
+      </div>
+    </div>
+  `},
+  { type: 'sistema', id: '5', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">x + 2y = 5</div>
+        <div class="system-line">3x - y = 4</div>
+      </div>
+    </div>
+  `},
+  { type: 'sistema', id: '6', content: `
+    <div class="system">
+      <div class="system-brace">{</div>
+      <div class="system-content">
+        <div class="system-line">x = 2y</div>
+        <div class="system-line">x + y = 48</div>
+      </div>
+    </div>
+  `},
+    ];
+
+    // Mapeamento entre problemas e sistemas
+    const correctPairs = {
+      "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6"
+    };
+
+// Soluções para cada sistema
+const solutions = {
+  "1": {
+    substitution: { 
+      x: 3, y: 1,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar uma variável", expression: "x + y = 4\nx = 4 - y" },
+        { title: "Passo 2: Substituir na segunda equação", expression: "x - y = 2\n(4 - y) - y = 2\n4 - 2y = 2" },
+        { title: "Passo 3: Resolver para y", expression: "4 - 2y = 2\n-2y = -2\ny = 1" },
+        { title: "Passo 4: Encontrar x", expression: "x = 4 - y\nx = 4 - 1\nx = 3" },
+        { title: "Solução Final", expression: "x = 3\ny = 1" }
+      ]
+    },
+    addition: { 
+      x: 3, y: 1,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(x + y) + (x - y) = 4 + 2\n2x = 6" },
+        { title: "Passo 2: Resolver para x", expression: "2x = 6\nx = 3" },
+        { title: "Passo 3: Substituir x na primeira equação", expression: "3 + y = 4\ny = 1" },
+        { title: "Solução Final", expression: "x = 3\ny = 1" }
+      ]
+    }
+  },
+  "2": { 
+    substitution: { 
+      x: 10, y: 5,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar x na segunda equação", expression: "x = y + 5" },
+        { title: "Passo 2: Substituir x na primeira equação", expression: "2(y + 5) + 2y = 30\n2y + 10 + 2y = 30\n4y = 20" },
+        { title: "Passo 3: Resolver para y", expression: "4y = 20\ny = 5" },
+        { title: "Passo 4: Substituir y na equação x = y + 5", expression: "x = 5 + 5\nx = 10" },
+        { title: "Solução Final", expression: "x = 10\ny = 5" }
+      ]
+    },
+    addition: { 
+      x: 10, y: 5,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(x + y) + (x - y) = 15 + 5\n2x = 20" },
+        { title: "Passo 2: Resolver para x", expression: "2x = 20\nx = 10" },
+        { title: "Passo 3: Substituir x na primeira equação", expression: "10 + y = 15\ny = 5" },
+        { title: "Solução Final", expression: "x = 10\ny = 5" }
+      ]
+    }
+  },
+  "3": { 
+    substitution: { 
+      x: 1.8, y: 0.8,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar x na segunda equação", expression: "x = y + 1" },
+        { title: "Passo 2: Substituir x na primeira equação", expression: "2(y + 1) + 3y = 6\n2y + 2 + 3y = 6\n5y = 4" },
+        { title: "Passo 3: Resolver para y", expression: "5y = 4\ny = 0.8" },
+        { title: "Passo 4: Substituir y na equação x = y + 1", expression: "x = 0.8 + 1\nx = 1.8" },
+        { title: "Solução Final", expression: "x = 1.8\ny = 0.8" }
+      ]
+    },
+    addition: { 
+      x: 1.8, y: 0.8,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(2x + 3y) + (x - y) = 6 + 1\n3x + 2y = 7" },
+        { title: "Passo 2: Resolver para x", expression: "3x = 7 - 2y" },
+        { title: "Passo 3: Substituir valores", expression: "x ≈ 1.8\ny ≈ 0.8" },
+        { title: "Solução Final", expression: "x = 1.8\ny = 0.8" }
+      ]
+    }
+  },
+  "4": {
+    substitution: { 
+      x: 4, y: 3,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar uma variável", expression: "2x - 3y = 6\nx = (6 + 3y)/2" },
+        { title: "Passo 2: Substituir na segunda equação", expression: "x - y = 1\n(6 + 3y)/2 - y = 1\n6 + 3y - 2y = 2\n6 + y = 2" },
+        { title: "Passo 3: Resolver para y", expression: "6 + y = 2\ny = -4" },
+        { title: "Passo 4: Substituir y na equação x = (6 + 3y)/2", expression: "x = (6 + 3(-4))/2 = (6 - 12)/2 = -3" },
+        { title: "Solução Final", expression: "x = -3\ny = -4" }
+      ]
+    },
+    addition: { 
+      x: -3, y: -4,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(2x - 3y) + (x - y) = 6 + 1\n3x - 4y = 7" },
+        { title: "Passo 2: Resolver para x", expression: "3x = 7 - 4y" },
+        { title: "Passo 3: Substituir valores", expression: "x ≈ -3\ny ≈ -4" },
+        { title: "Solução Final", expression: "x = -3\ny = -4" }
+      ]
+    }
+  },
+  "5": {
+    substitution: { 
+      x: 6, y: 3,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar uma variável", expression: "x + y = 9\nx = 9 - y" },
+        { title: "Passo 2: Substituir na segunda equação", expression: "2x - y = 12\n2(9 - y) - y = 12\n18 - 2y - y = 12" },
+        { title: "Passo 3: Resolver para y", expression: "18 - 3y = 12\n-3y = -6\ny = 2" },
+        { title: "Passo 4: Substituir y na equação x = 9 - y", expression: "x = 9 - 2\nx = 7" },
+        { title: "Solução Final", expression: "x = 7\ny = 2" }
+      ]
+    },
+    addition: { 
+      x: 7, y: 2,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(x + y) + (2x - y) = 9 + 12\n3x = 21" },
+        { title: "Passo 2: Resolver para x", expression: "3x = 21\nx = 7" },
+        { title: "Passo 3: Substituir x na primeira equação", expression: "7 + y = 9\ny = 2" },
+        { title: "Solução Final", expression: "x = 7\ny = 2" }
+      ]
+    }
+  },
+  "6": {
+    substitution: { 
+      x: 8, y: 6,
+      method: "substituição",
+      steps: [
+        { title: "Passo 1: Isolar uma variável", expression: "4x - 5y = 2\nx = (2 + 5y)/4" },
+        { title: "Passo 2: Substituir na segunda equação", expression: "x + y = 14\n(2 + 5y)/4 + y = 14\n2 + 5y + 4y = 56" },
+        { title: "Passo 3: Resolver para y", expression: "9y = 54\ny = 6" },
+        { title: "Passo 4: Substituir y na equação x = (2 + 5y)/4", expression: "x = (2 + 5(6))/4 = (2 + 30)/4 = 8" },
+        { title: "Solução Final", expression: "x = 8\ny = 6" }
+      ]
+    },
+    addition: { 
+      x: 8, y: 6,
+      method: "adição",
+      steps: [
+        { title: "Passo 1: Somar as equações", expression: "(4x - 5y) + (x + y) = 2 + 14\n5x - 4y = 16" },
+        { title: "Passo 2: Resolver para x", expression: "5x = 16 + 4y" },
+        { title: "Passo 3: Substituir valores", expression: "x ≈ 8\ny ≈ 6" },
+        { title: "Solução Final", expression: "x = 8\ny = 6" }
+      ]
+    }
+  }
+};
+
+    // Funções auxiliares
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+      gameState.currentPage = pageId;
+
+      // Inicializar a página quando for mostrada
+      if (pageId === 'page1') initPage1();
+      else if (pageId === 'page2') initPage2();
+      else if (pageId === 'page3') initPage3();
+    }
+
+    // Página 1 - Seleção de Sistema
+    function initPage1() {
+      // Limpar seleção atual (mas manter cartas corretas)
+      gameState.selectedCards = [];
+      selectedBox.innerHTML = '';
+      selectedBox.style.border = '3px solid transparent';
+      selectedBox.style.backgroundColor = '#FFE9BD';
+      validateBtn.disabled = true;
+
+      // Atualizar contadores
+      matchCountSpan.textContent = gameState.progress.matches;
+      solveCountSpan.textContent = gameState.progress.solves;
+
+      // Criar e embaralhar cartas
+      createAndShuffleCards();
+    }
+
+    function createAndShuffleCards() {
+      const shuffledCards = shuffleArray([...cardContents]);
+      cardBoard.innerHTML = '';
+      
+      shuffledCards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.dataset.type = card.type;
+        cardElement.dataset.id = card.id;
+        cardElement.innerHTML = card.content;
+        
+        // Verificar se a carta já foi acertada
+        const isMatched = gameState.matchedPairs.some(pair => 
+          (pair.problemId === card.id && card.type === 'enunciado') || 
+          (pair.systemId === card.id && card.type === 'sistema')
+        );
+        
+        if (isMatched) {
+          cardElement.classList.add('correct');
+          cardElement.style.cursor = 'default';
+        }
+        
+        cardBoard.appendChild(cardElement);
+      });
+      
+      assignCardListeners();
+    }
+
+    function assignCardListeners() {
+      const cards = document.querySelectorAll('#cardBoard .card');
+      
+      cards.forEach(card => {
+        // Não adicionar listener para cartas já acertadas
+        if (card.classList.contains('correct')) return;
+        
+        card.addEventListener('click', () => {
+          const type = card.dataset.type;
+          const currentTypes = gameState.selectedCards.map(c => c.dataset.type);
+
+          if (
+            gameState.selectedCards.includes(card) ||
+            gameState.selectedCards.length >= 2 ||
+            (currentTypes.includes(type))
+          ) return;
+
+          card.classList.add('selected');
+          gameState.selectedCards.push(card);
+
+          const sel = document.createElement('div');
+          sel.classList.add('selected-card');
+          
+          if (card.dataset.type === 'enunciado') {
+            sel.textContent = card.querySelector('.problem-text').textContent;
+          } else {
+            // Para sistemas, criar a mesma estrutura que nas outras páginas
+            const systemContainer = document.createElement('div');
+            systemContainer.className = 'selected-system';
+            
+            const brace = document.createElement('div');
+            brace.className = 'selected-brace';
+            brace.textContent = '{';
+            
+            const content = document.createElement('div');
+            content.className = 'selected-system-content';
+            
+            // Extrair as linhas do sistema
+            const lines = card.querySelectorAll('.system-line');
+            lines.forEach(line => {
+              const lineDiv = document.createElement('div');
+              lineDiv.className = 'selected-system-line';
+              lineDiv.textContent = line.textContent;
+              content.appendChild(lineDiv);
+            });
+            
+            systemContainer.appendChild(brace);
+            systemContainer.appendChild(content);
+            sel.appendChild(systemContainer);
+          }
+          
+          selectedBox.appendChild(sel);
+          validateBtn.disabled = gameState.selectedCards.length !== 2;
+        });
+      });
+    }
+
+    // Página 2 - Resolução do Sistema
+    function initPage2() {
+      // Exibir problema e sistema
+      problemText.textContent = gameState.selectedSystem.problem;
+      systemContent.innerHTML = '';
+      
+      // Criar elemento para exibir o sistema corretamente
+      const systemLines = gameState.selectedSystem.system.split('\n');
+      systemLines.forEach(line => {
+        if (line.trim() === '') return;
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'system-line';
+        lineDiv.textContent = line.trim();
+        systemContent.appendChild(lineDiv);
+      });
+
+      // Limpar estado anterior
+      gameState.selectedNumbers = [];
+      feedbackBox.style.display = 'none';
+      solutionBtn.style.display = 'none';
+      backBtn.style.display = 'none';
+      submitBtn.disabled = true;
+      clearNumbersBtn.disabled = true;
+
+      // Gerar cartas com números
+      generateNumberCards();
+
+const methodSelector = document.querySelector('.method-selector');
+methodSelector.innerHTML = `
+  <p>Selecione o método de resolução:</p>
+  <div style="display: flex; justify-content: center; gap: 20px; margin: 15px 0;">
+    <label style="display: flex; align-items: center;">
+      <input type="radio" name="method" value="substituicao" checked> Substituição
+    </label>
+    <label style="display: flex; align-items: center;">
+      <input type="radio" name="method" value="adicao"> Adição
+    </label>
+  </div>
+`;
+    }
+
+function generateNumberCards() {
+  const systemId = gameState.selectedSystem.systemId;
+  const correctSolution = solutions[systemId];
+  
+  // Verifica se a solução existe
+  if (!correctSolution) {
+    console.error('Solução não encontrada para o sistema:', systemId);
+    return;
+  }
+
+  // Valores padrão caso não exista a solução por substituição
+  const xValue = correctSolution.substitution?.x ?? 0;
+  const yValue = correctSolution.substitution?.y ?? 0;
+  
+  const numbers = new Set(); // Usamos Set para evitar duplicatas
+  
+  // Adiciona as soluções corretas
+  numbers.add(xValue);
+  numbers.add(yValue);
+  
+  // Adiciona números próximos (+1, -1, +2, -2)
+  [xValue, yValue].forEach(val => {
+    numbers.add(val + 1);
+    numbers.add(val - 1);
+    numbers.add(val + 2);
+    numbers.add(val - 2);
+  });
+  
+  // Completa com números aleatórios distintos (entre -5 e 15)
+  while (numbers.size < 6) {
+    const randomNum = Math.floor(Math.random() * 21) - 5; // -5 a 15
+    numbers.add(randomNum);
+  }
+  
+  // Converte para array e embaralha
+  const numbersArray = Array.from(numbers).slice(0, 6); // Pega apenas 6 números
+  shuffleArray(numbersArray);
+  
+  // Limpa e recria as cartas
+  numberCards.innerHTML = '';
+  
+  numbersArray.forEach(num => {
+    const card = document.createElement('div');
+    card.className = 'number-card';
+    card.textContent = num.toString();
+    card.dataset.value = num;
+    card.addEventListener('click', () => selectNumber(card));
+    numberCards.appendChild(card);
+  });
+}
+
+function formatarNumeroCarta(numero) {
+  // Converte para número (caso seja string)
+  const num = Number(numero);
+  
+  // Verifica se é um número válido
+  if (isNaN(num)) return '0';
+  
+  // Formata números inteiros e decimais
+  if (Number.isInteger(num)) {
+    return num.toString();
+  } else {
+    // Remove zeros desnecessários em decimais
+    return num.toFixed(4).replace(/\.?0+$/, '');
+  }
+}
+
+    function selectNumber(card) {
+      if (card.classList.contains('selected')) {
+        card.classList.remove('selected');
+        gameState.selectedNumbers = gameState.selectedNumbers.filter(
+          n => n !== parseFloat(card.dataset.value)
+        );
+      } else if (gameState.selectedNumbers.length < 2) {
+        card.classList.add('selected');
+        gameState.selectedNumbers.push(parseFloat(card.dataset.value));
+      }
+      
+      submitBtn.disabled = gameState.selectedNumbers.length !== 2;
+      clearNumbersBtn.disabled = gameState.selectedNumbers.length === 0;
+    }
+
+    function clearNumberSelection() {
+      document.querySelectorAll('.number-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      gameState.selectedNumbers = [];
+      submitBtn.disabled = true;
+      clearNumbersBtn.disabled = true;
+    }
+
+    let hasAnswered = false;  // Variável de controle para evitar contagem duplicada
+
+function checkAnswer() {
+    const correctSolution = solutions[gameState.selectedSystem.systemId];
+    const isCorrect = (
+        gameState.selectedNumbers.includes(correctSolution.x) && 
+        gameState.selectedNumbers.includes(correctSolution.y) &&
+        gameState.selectedNumbers[0] !== gameState.selectedNumbers[1]
+    );
+
+    if (isCorrect) {
+        feedbackBox.textContent = 'Resposta correta! Parabéns!';
+        feedbackBox.className = 'feedback-box correct-feedback';
+
+        // Só incrementa o contador se não tiver sido respondido corretamente ainda
+        if (!hasAnswered) {
+            gameState.progress.solves++;
+            solveCountSpan.textContent = gameState.progress.solves;
+            hasAnswered = true;  // Marca como respondido
+        }
+    } else {
+        feedbackBox.textContent = 'Resposta incorreta. Tente novamente ou veja a solução.';
+        feedbackBox.className = 'feedback-box incorrect-feedback';
+    }
+    
+    feedbackBox.style.display = 'block';
+    solutionBtn.style.display = 'inline-block';
+    backBtn.style.display = 'inline-block';
+
+    // Mensagem de feedback
+    feedbackBox.innerHTML = isCorrect
+        ? '<div style="color: #2E7D32; font-weight: bold;">Resposta correta! Parabéns!</div>'
+        : '<div style="color: #C62828; font-weight: bold;">Resposta incorreta. Veja a solução abaixo.</div>';
+
+    // Adiciona o seletor de método DINAMICAMENTE
+    feedbackBox.innerHTML += `
+        <div class="method-selector" style="margin-top: 15px;">
+            <p><strong>Escolha o método para ver a solução:</strong></p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <label><input type="radio" name="method" value="substituicao" checked> Substituição</label>
+                <label><input type="radio" name="method" value="adicao"> Adição</label>
+            </div>
+        </div>
+    `;
+    
+    feedbackBox.style.display = 'block';
+    solutionBtn.style.display = 'inline-block';
+    backBtn.style.display = 'inline-block';
+
+function setupMethodListeners() {
+  const methodRadios = document.querySelectorAll('input[name="method"]');
+  methodRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      metodoSelecionado = e.target.value;
+    });
+  });
+}
+
+  // Atualiza listeners dos radio buttons
+  setupMethodListeners();
+
+// Atualiza a seleção do método
+  document.querySelectorAll('input[name="method"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      metodoSelecionado = e.target.value; // Armazena a escolha globalmente
+    });
+  });
+}
+
+    // Página 3 - Solução do Sistema
+    function initPage3() {
+  solutionProblemText.textContent = gameState.selectedSystem.problem;
+  solutionSystemContent.innerHTML = '';
+
+  // Exibe o sistema formatado
+  const systemLines = gameState.selectedSystem.system.split('\n');
+  systemLines.forEach(line => {
+    if (line.trim() === '') return;
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'system-line';
+    lineDiv.textContent = line.trim();
+    solutionSystemContent.appendChild(lineDiv);
+  });
+
+  // Atualiza o método exibido
+  methodUsed.textContent = `Método utilizado: ${metodoSelecionado === 'substituicao' ? 'Substituição' : 'Adição'}`;
+
+  // Limpa os passos anteriores
+  solutionSteps.innerHTML = '';
+
+  // Exibe os passos conforme o método
+  const sistemaId = gameState.selectedSystem.systemId; // <-- ÚNICA declaração
+  
+  const steps = (metodoSelecionado === 'substituicao') 
+    ? solutions[sistemaId].steps 
+    : getPassosAdicao(sistemaId);
+
+  steps.forEach(step => {
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step';
+    
+    const title = document.createElement('div');
+    title.className = 'step-title';
+    title.textContent = step.title;
+    
+    const expr = document.createElement('div');
+    expr.className = 'math-expression';
+    expr.textContent = step.expression;
+    
+    stepDiv.appendChild(title);
+    stepDiv.appendChild(expr);
+    solutionSteps.appendChild(stepDiv);
+  });
+
+// Função nova: Retorna os passos da Adição para cada sistema
+function getPassosAdicao(sistemaId) {
+  const passosAdicao = {
+    "1": [ 
+      { 
+        title: "Passo 1: Somar as equações", 
+        expression: "(x + y) + (x - y) = 4 + 2\n2x = 6" 
+      },
+      { 
+        title: "Passo 2: Resolver para x", 
+        expression: "2x = 6\nx = 3" 
+      },
+      { 
+        title: "Passo 3: Substituir x na primeira equação", 
+        expression: "3 + y = 4\ny = 1" 
+      }
+    ],
+    "2": [ 
+      { 
+        title: "Passo 1: Simplificar a primeira equação", 
+        expression: "2x + 2y = 30\nDividir tudo por 2:\nx + y = 15" 
+      },
+      { 
+        title: "Passo 2: Somar com a segunda equação", 
+        expression: "(x + y) + (x - y) = 15 + 5\n2x = 20" 
+      },
+      { 
+        title: "Passo 3: Resolver para x", 
+        expression: "2x = 20\nx = 10" 
+      }
+    ]
+  };
+  return passosAdicao[sistemaId] || [];
+}
+
+// Exibe o método selecionado
+  methodUsed.textContent = `Método utilizado: ${metodoSelecionado === 'substituicao' ? 'Substituição' : 'Adição'}`;
+
+
+
+  steps.forEach(step => {
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step';
+    stepDiv.innerHTML = `
+      <div class="step-title">${step.title}</div>
+      <div class="math-expression">${step.expression.replace(/\n/g, '<br>')}</div>
+    `;
+    solutionSteps.appendChild(stepDiv);
+  });
+}
+      
+    // Event Listeners
+    validateBtn.addEventListener('click', () => {
+      if (gameState.selectedCards.length !== 2) return;
+
+      const [card1, card2] = gameState.selectedCards;
+      const type1 = card1.dataset.type;
+      const type2 = card2.dataset.type;
+
+      if ((type1 === 'enunciado' && type2 === 'sistema') || 
+          (type1 === 'sistema' && type2 === 'enunciado')) {
+        
+        const problemCard = type1 === 'enunciado' ? card1 : card2;
+        const systemCard = type1 === 'sistema' ? card1 : card2;
+        
+        const problemId = problemCard.dataset.id;
+        const systemId = systemCard.dataset.id;
+
+        if (correctPairs[problemId] === systemId) {
+          // Armazenar sistema selecionado
+          gameState.selectedSystem = {
+            problem: problemCard.querySelector('.problem-text').textContent,
+            system: systemCard.querySelector('.system-content').innerText,
+            systemId: systemId
+          };
+          
+          gameState.progress.matches++;
+          matchCountSpan.textContent = gameState.progress.matches;
+          
+          // Adicionar ao registro de pares acertados
+          gameState.matchedPairs.push({
+            problemId: problemId,
+            systemId: systemId
+          });
+          
+          // Feedback visual
+          selectedBox.style.border = '3px solid #4CAF50';
+          selectedBox.style.backgroundColor = '#E8F5E9';
+          gameState.selectedCards.forEach(card => {
+            card.classList.remove('selected');
+            card.classList.add('correct');
+          });
+
+          // Ir para página de resolução após 1 segundo
+          setTimeout(() => showPage('page2'), 1000);
+        } else {
+          selectedBox.style.border = '3px solid #FF3B3B';
+          selectedBox.style.backgroundColor = '#FFEBEE';
+          gameState.selectedCards.forEach(card => {
+            card.classList.remove('selected');
+            card.classList.add('incorrect');
+            setTimeout(() => card.classList.remove('incorrect'), 500);
+          });
+
+          setTimeout(() => {
+            gameState.selectedCards = [];
+            selectedBox.innerHTML = '';
+            selectedBox.style.border = '3px solid transparent';
+            selectedBox.style.backgroundColor = '#FFE9BD';
+            validateBtn.disabled = true;
+          }, 1000);
+        }
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      gameState.selectedCards.forEach(card => {
+        card.classList.remove('selected');
+      });
+      gameState.selectedCards = [];
+      selectedBox.innerHTML = '';
+      selectedBox.style.border = '3px solid transparent';
+      selectedBox.style.backgroundColor = '#FFE9BD';
+      validateBtn.disabled = true;
+    });
+
+    submitBtn.addEventListener('click', checkAnswer);
+    
+    clearNumbersBtn.addEventListener('click', clearNumberSelection);
+    
+    solutionBtn.addEventListener('click', () => {
+      showPage('page3');
+    });
+    
+    backBtn.addEventListener('click', () => {
+      showPage('page1');
+    });
+
+    homeBtn.addEventListener('click', () => {
+      showPage('page1');
+    });
+
+backToSolutionBtn.addEventListener('click', () => {
+  // Mantém o sistema selecionado ao voltar
+  showPage('page2');
+  
+  // Restaura a seleção anterior do método
+  setTimeout(() => {
+    const radio = document.querySelector(`input[name="method"][value="${metodoSelecionado}"]`);
+    if (radio) radio.checked = true;
+  }, 50);
+});
+
+    // Inicialização
+    function initGame() {
+      // Iniciar contadores zerados
+      gameState.progress.matches = 0;
+      gameState.progress.solves = 0;
+      gameState.matchedPairs = [];
+      
+      showPage('page1');
+    }
+
+    // Iniciar o jogo quando a página carregar
+    window.addEventListener('DOMContentLoaded', initGame);
+  </script>
+</body>
+</html>
