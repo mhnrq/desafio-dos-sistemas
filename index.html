@@ -609,143 +609,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Soluções para cada sistema
 const solutions = {
-  "1": {
-    substitution: { 
-      x: 3, y: 1,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar uma variável", expression: "x + y = 4\nx = 4 - y" },
-        { title: "Passo 2: Substituir na segunda equação", expression: "x - y = 2\n(4 - y) - y = 2\n4 - 2y = 2" },
-        { title: "Passo 3: Resolver para y", expression: "4 - 2y = 2\n-2y = -2\ny = 1" },
-        { title: "Passo 4: Encontrar x", expression: "x = 4 - y\nx = 4 - 1\nx = 3" },
-        { title: "Solução Final", expression: "x = 3\ny = 1" }
-      ]
-    },
-    addition: { 
-      x: 3, y: 1,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(x + y) + (x - y) = 4 + 2\n2x = 6" },
-        { title: "Passo 2: Resolver para x", expression: "2x = 6\nx = 3" },
-        { title: "Passo 3: Substituir x na primeira equação", expression: "3 + y = 4\ny = 1" },
-        { title: "Solução Final", expression: "x = 3\ny = 1" }
-      ]
-    }
+  "1": { // x + y = 4, x - y = 2
+    substitution: { x: 3, y: 1 },
+    addition: { x: 3, y: 1 }
   },
-  "2": { 
-    substitution: { 
-      x: 10, y: 5,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar x na segunda equação", expression: "x = y + 5" },
-        { title: "Passo 2: Substituir x na primeira equação", expression: "2(y + 5) + 2y = 30\n2y + 10 + 2y = 30\n4y = 20" },
-        { title: "Passo 3: Resolver para y", expression: "4y = 20\ny = 5" },
-        { title: "Passo 4: Substituir y na equação x = y + 5", expression: "x = 5 + 5\nx = 10" },
-        { title: "Solução Final", expression: "x = 10\ny = 5" }
-      ]
-    },
-    addition: { 
-      x: 10, y: 5,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(x + y) + (x - y) = 15 + 5\n2x = 20" },
-        { title: "Passo 2: Resolver para x", expression: "2x = 20\nx = 10" },
-        { title: "Passo 3: Substituir x na primeira equação", expression: "10 + y = 15\ny = 5" },
-        { title: "Solução Final", expression: "x = 10\ny = 5" }
-      ]
-    }
+  "2": { // 2x + 2y = 30, x - y = 5
+    substitution: { x: 10, y: 5 },
+    addition: { x: 10, y: 5 }
   },
-  "3": { 
-    substitution: { 
-      x: 1.8, y: 0.8,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar x na segunda equação", expression: "x = y + 1" },
-        { title: "Passo 2: Substituir x na primeira equação", expression: "2(y + 1) + 3y = 6\n2y + 2 + 3y = 6\n5y = 4" },
-        { title: "Passo 3: Resolver para y", expression: "5y = 4\ny = 0.8" },
-        { title: "Passo 4: Substituir y na equação x = y + 1", expression: "x = 0.8 + 1\nx = 1.8" },
-        { title: "Solução Final", expression: "x = 1.8\ny = 0.8" }
-      ]
-    },
-    addition: { 
-      x: 1.8, y: 0.8,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(2x + 3y) + (x - y) = 6 + 1\n3x + 2y = 7" },
-        { title: "Passo 2: Resolver para x", expression: "3x = 7 - 2y" },
-        { title: "Passo 3: Substituir valores", expression: "x ≈ 1.8\ny ≈ 0.8" },
-        { title: "Solução Final", expression: "x = 1.8\ny = 0.8" }
-      ]
-    }
+  "3": { // 2x + 3y = 6, x - y = 1
+    substitution: { x: 1.8, y: 0.8 },
+    addition: { x: 1.8, y: 0.8 }
   },
-  "4": {
-    substitution: { 
-      x: 4, y: 3,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar uma variável", expression: "2x - 3y = 6\nx = (6 + 3y)/2" },
-        { title: "Passo 2: Substituir na segunda equação", expression: "x - y = 1\n(6 + 3y)/2 - y = 1\n6 + 3y - 2y = 2\n6 + y = 2" },
-        { title: "Passo 3: Resolver para y", expression: "6 + y = 2\ny = -4" },
-        { title: "Passo 4: Substituir y na equação x = (6 + 3y)/2", expression: "x = (6 + 3(-4))/2 = (6 - 12)/2 = -3" },
-        { title: "Solução Final", expression: "x = -3\ny = -4" }
-      ]
-    },
-    addition: { 
-      x: -3, y: -4,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(2x - 3y) + (x - y) = 6 + 1\n3x - 4y = 7" },
-        { title: "Passo 2: Resolver para x", expression: "3x = 7 - 4y" },
-        { title: "Passo 3: Substituir valores", expression: "x ≈ -3\ny ≈ -4" },
-        { title: "Solução Final", expression: "x = -3\ny = -4" }
-      ]
-    }
+  "4": { // x = y + 3, x + y = 15
+    substitution: { x: 9, y: 6 },
+    addition: { x: 9, y: 6 }
   },
-  "5": {
-    substitution: { 
-      x: 6, y: 3,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar uma variável", expression: "x + y = 9\nx = 9 - y" },
-        { title: "Passo 2: Substituir na segunda equação", expression: "2x - y = 12\n2(9 - y) - y = 12\n18 - 2y - y = 12" },
-        { title: "Passo 3: Resolver para y", expression: "18 - 3y = 12\n-3y = -6\ny = 2" },
-        { title: "Passo 4: Substituir y na equação x = 9 - y", expression: "x = 9 - 2\nx = 7" },
-        { title: "Solução Final", expression: "x = 7\ny = 2" }
-      ]
-    },
-    addition: { 
-      x: 7, y: 2,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(x + y) + (2x - y) = 9 + 12\n3x = 21" },
-        { title: "Passo 2: Resolver para x", expression: "3x = 21\nx = 7" },
-        { title: "Passo 3: Substituir x na primeira equação", expression: "7 + y = 9\ny = 2" },
-        { title: "Solução Final", expression: "x = 7\ny = 2" }
-      ]
-    }
+  "5": { // x + 2y = 5, 3x - y = 4
+    substitution: { x: 1, y: 1.7 },
+    addition: { x: 1, y: 1.7 }
   },
-  "6": {
-    substitution: { 
-      x: 8, y: 6,
-      method: "substituição",
-      steps: [
-        { title: "Passo 1: Isolar uma variável", expression: "4x - 5y = 2\nx = (2 + 5y)/4" },
-        { title: "Passo 2: Substituir na segunda equação", expression: "x + y = 14\n(2 + 5y)/4 + y = 14\n2 + 5y + 4y = 56" },
-        { title: "Passo 3: Resolver para y", expression: "9y = 54\ny = 6" },
-        { title: "Passo 4: Substituir y na equação x = (2 + 5y)/4", expression: "x = (2 + 5(6))/4 = (2 + 30)/4 = 8" },
-        { title: "Solução Final", expression: "x = 8\ny = 6" }
-      ]
-    },
-    addition: { 
-      x: 8, y: 6,
-      method: "adição",
-      steps: [
-        { title: "Passo 1: Somar as equações", expression: "(4x - 5y) + (x + y) = 2 + 14\n5x - 4y = 16" },
-        { title: "Passo 2: Resolver para x", expression: "5x = 16 + 4y" },
-        { title: "Passo 3: Substituir valores", expression: "x ≈ 8\ny ≈ 6" },
-        { title: "Solução Final", expression: "x = 8\ny = 6" }
-      ]
-    }
+  "6": { // x = 2y, x + y = 48
+    substitution: { x: 32, y: 16 },
+    addition: { x: 32, y: 16 }
   }
 };
 
@@ -916,49 +802,72 @@ methodSelector.innerHTML = `
 
 function generateNumberCards() {
   const systemId = gameState.selectedSystem.systemId;
-  const correctSolution = solutions[systemId];
+  const correctSolution = solutions[systemId]?.substitution;
   
-  // Verifica se a solução existe
   if (!correctSolution) {
     console.error('Solução não encontrada para o sistema:', systemId);
     return;
   }
 
-  // Valores padrão caso não exista a solução por substituição
-  const xValue = correctSolution.substitution?.x ?? 0;
-  const yValue = correctSolution.substitution?.y ?? 0;
+  // Função para formatar o número (inteiro ou decimal com até 2 casas)
+  const formatNumber = (num) => {
+    if (Number.isInteger(num)) {
+      return num.toString();
+    } else {
+      // Arredonda para 2 casas decimais e remove zeros desnecessários
+      return parseFloat(num.toFixed(2)).toString();
+    }
+  };
+
+  const numbers = new Set();
   
-  const numbers = new Set(); // Usamos Set para evitar duplicatas
+  // 1. Adiciona as soluções corretas (garantido)
+  numbers.add(correctSolution.x);
+  numbers.add(correctSolution.y);
   
-  // Adiciona as soluções corretas
-  numbers.add(xValue);
-  numbers.add(yValue);
+  // 2. Adiciona variações próximas
+  const addRelatedNumbers = (value) => {
+    const variations = [
+      value + 1, 
+      value - 1,
+      value + 0.5,
+      value - 0.5,
+      value * 1.5,
+      value / 2
+    ];
+    
+    for (const variation of variations) {
+      if (numbers.size >= 6) break;
+      const roundedVariation = typeof variation === 'number' ? 
+                             parseFloat(variation.toFixed(2)) : 
+                             variation;
+      if (!numbers.has(roundedVariation)) {
+        numbers.add(roundedVariation);
+      }
+    }
+  };
   
-  // Adiciona números próximos (+1, -1, +2, -2)
-  [xValue, yValue].forEach(val => {
-    numbers.add(val + 1);
-    numbers.add(val - 1);
-    numbers.add(val + 2);
-    numbers.add(val - 2);
-  });
+  addRelatedNumbers(correctSolution.x);
+  addRelatedNumbers(correctSolution.y);
   
-  // Completa com números aleatórios distintos (entre -5 e 15)
+  // 3. Completa com números aleatórios distintos (se necessário)
+  const possibleNumbers = [-3, -2, -1, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
   while (numbers.size < 6) {
-    const randomNum = Math.floor(Math.random() * 21) - 5; // -5 a 15
-    numbers.add(randomNum);
+    const randomNum = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
+    if (!numbers.has(randomNum)) {
+      numbers.add(randomNum);
+    }
   }
   
-  // Converte para array e embaralha
-  const numbersArray = Array.from(numbers).slice(0, 6); // Pega apenas 6 números
-  shuffleArray(numbersArray);
-  
-  // Limpa e recria as cartas
+  // 4. Cria exatamente 6 cartas
   numberCards.innerHTML = '';
+  const finalNumbers = Array.from(numbers).slice(0, 6);
+  shuffleArray(finalNumbers);
   
-  numbersArray.forEach(num => {
+  finalNumbers.forEach(num => {
     const card = document.createElement('div');
     card.className = 'number-card';
-    card.textContent = num.toString();
+    card.textContent = formatNumber(num); // Usa a função de formatação
     card.dataset.value = num;
     card.addEventListener('click', () => selectNumber(card));
     numberCards.appendChild(card);
@@ -1008,62 +917,50 @@ function formatarNumeroCarta(numero) {
     let hasAnswered = false;  // Variável de controle para evitar contagem duplicada
 
 function checkAnswer() {
-    const correctSolution = solutions[gameState.selectedSystem.systemId];
-    const isCorrect = (
-        gameState.selectedNumbers.includes(correctSolution.x) && 
-        gameState.selectedNumbers.includes(correctSolution.y) &&
-        gameState.selectedNumbers[0] !== gameState.selectedNumbers[1]
-    );
+  const systemId = gameState.selectedSystem.systemId;
+  const correctSolution = solutions[systemId]?.substitution; // Usa substituição como padrão
+  
+  if (!correctSolution) {
+    console.error('Solução não encontrada para o sistema:', systemId);
+    return;
+  }
 
-    if (isCorrect) {
-        feedbackBox.textContent = 'Resposta correta! Parabéns!';
-        feedbackBox.className = 'feedback-box correct-feedback';
+  // Verifica se ambos os números corretos foram selecionados (em qualquer ordem)
+  const hasX = gameState.selectedNumbers.includes(correctSolution.x);
+  const hasY = gameState.selectedNumbers.includes(correctSolution.y);
+  const isCorrect = hasX && hasY && gameState.selectedNumbers.length === 2;
 
-        // Só incrementa o contador se não tiver sido respondido corretamente ainda
-        if (!hasAnswered) {
-            gameState.progress.solves++;
-            solveCountSpan.textContent = gameState.progress.solves;
-            hasAnswered = true;  // Marca como respondido
-        }
-    } else {
-        feedbackBox.textContent = 'Resposta incorreta. Tente novamente ou veja a solução.';
-        feedbackBox.className = 'feedback-box incorrect-feedback';
-    }
-    
-    feedbackBox.style.display = 'block';
-    solutionBtn.style.display = 'inline-block';
-    backBtn.style.display = 'inline-block';
+  // Atualiza a interface com feedback
+  feedbackBox.innerHTML = isCorrect
+    ? '<div style="color: #2E7D32; font-weight: bold;">Resposta correta! Parabéns!</div>'
+    : '<div style="color: #C62828; font-weight: bold;">Resposta incorreta. Veja a solução abaixo.</div>';
 
-    // Mensagem de feedback
-    feedbackBox.innerHTML = isCorrect
-        ? '<div style="color: #2E7D32; font-weight: bold;">Resposta correta! Parabéns!</div>'
-        : '<div style="color: #C62828; font-weight: bold;">Resposta incorreta. Veja a solução abaixo.</div>';
+  feedbackBox.className = isCorrect ? 'feedback-box correct-feedback' : 'feedback-box incorrect-feedback';
+  feedbackBox.style.display = 'block';
 
-    // Adiciona o seletor de método DINAMICAMENTE
-    feedbackBox.innerHTML += `
-        <div class="method-selector" style="margin-top: 15px;">
-            <p><strong>Escolha o método para ver a solução:</strong></p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <label><input type="radio" name="method" value="substituicao" checked> Substituição</label>
-                <label><input type="radio" name="method" value="adicao"> Adição</label>
-            </div>
-        </div>
-    `;
-    
-    feedbackBox.style.display = 'block';
-    solutionBtn.style.display = 'inline-block';
-    backBtn.style.display = 'inline-block';
+  // Mostra os botões de solução e voltar
+  solutionBtn.style.display = 'inline-block';
+  backBtn.style.display = 'inline-block';
 
-function setupMethodListeners() {
-  const methodRadios = document.querySelectorAll('input[name="method"]');
-  methodRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      metodoSelecionado = e.target.value;
-    });
-  });
-}
+  // Adiciona o seletor de método
+  feedbackBox.innerHTML += `
+    <div class="method-selector" style="margin-top: 15px;">
+      <p><strong>Escolha o método para ver a solução:</strong></p>
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <label><input type="radio" name="method" value="substituicao" checked> Substituição</label>
+        <label><input type="radio" name="method" value="adicao"> Adição</label>
+      </div>
+    </div>
+  `;
 
-  // Atualiza listeners dos radio buttons
+  // Atualiza o progresso apenas se estiver correto e não tiver sido respondido antes
+  if (isCorrect && !hasAnswered) {
+    gameState.progress.solves++;
+    solveCountSpan.textContent = gameState.progress.solves;
+    hasAnswered = true;
+  }
+
+  // Configura os listeners dos radio buttons
   setupMethodListeners();
 
 // Atualiza a seleção do método
