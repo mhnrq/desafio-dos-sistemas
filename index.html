@@ -666,6 +666,9 @@ const solutions = {
       selectedBox.style.backgroundColor = '#FFE9BD';
       validateBtn.disabled = true;
 
+      // Resetar a flag de resposta
+      hasAnswered = false; // <--- Esta é a linha importante
+
       // Atualizar contadores
       matchCountSpan.textContent = gameState.progress.matches;
       solveCountSpan.textContent = gameState.progress.solves;
